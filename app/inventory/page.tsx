@@ -389,7 +389,7 @@ export default function InventoryPage() {
                       </h2>
 
                       <p className="mt-3 text-zinc-400">
-                        {car.mileage?.toLocaleString()} km
+                        {car.mileage?.toLocaleString()} miles
                       </p>
 
                       <div className="mt-5 flex items-end justify-between gap-4">
