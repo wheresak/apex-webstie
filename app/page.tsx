@@ -1,65 +1,210 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="min-h-screen bg-[#050505] text-white">
+      <section className="relative overflow-hidden px-6 pb-20 pt-24">
+        <div className="absolute inset-0 overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover blur-sm scale-105 opacity-40"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
+
+          <div className="absolute inset-0 bg-black/55" />
         </div>
-      </main>
-    </div>
+
+        <div className="relative mx-auto max-w-7xl">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="mb-4 text-sm uppercase tracking-[0.35em] text-zinc-400">
+              Phoenix Automotive
+            </p>
+
+            <h1
+              className="text-5xl font-bold leading-tight tracking-tight sm:text-7xl"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              Built For
+              <span className="block text-[#d71920]">Drivers Who Care</span>
+            </h1>
+
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-zinc-300 sm:text-lg">
+              Apex Autowerks delivers premium tint, detailing, ceramic coating,
+              and a modern used-car inventory experience — all under one brand.
+            </p>
+
+            
+          </div>
+
+          <div className="mt-16 grid gap-6 lg:grid-cols-2">
+            <Link
+              href="/services"
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#101010] p-8 text-center transition duration-300 hover:-translate-y-1 hover:border-[#d71920]/40"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(215,25,32,0.18),transparent_36%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+
+              <div className="relative flex h-full flex-col items-center">
+                <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                  Automotive Services
+                </p>
+
+                <h2
+                  className="mt-4 text-3xl font-bold sm:text-4xl"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  Tint, Detailing & Ceramic Coating
+                </h2>
+
+                <p className="mx-auto mt-4 max-w-xl leading-7 text-zinc-300">
+                  Premium vehicle care with a sharper, performance-focused feel.
+                  Clean installs, protection, and finish work done right.
+                </p>
+
+                <div className="mt-8 grid w-full gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+                      Tint
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">
+                      Clean install
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+                      Detailing
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">
+                      Deep restoration
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+                      Ceramic
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">
+                      Lasting protection
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition group-hover:border-[#d71920]/50">
+                  Go to Services
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/inventory"
+              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#101010] p-8 text-center transition duration-300 hover:-translate-y-1 hover:border-[#d71920]/40"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(215,25,32,0.18),transparent_36%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+
+              <div className="relative flex h-full flex-col items-center">
+                <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                  Used Cars
+                </p>
+
+                <h2
+                  className="mt-4 text-3xl font-bold sm:text-4xl"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  Browse Premium Pre-Owned Inventory
+                </h2>
+
+                <p className="mx-auto mt-4 max-w-xl leading-7 text-zinc-300">
+                  Shop a cleaner used-car experience with rich galleries,
+                  detailed specs, and trust worthy sellers.
+                </p>
+
+                <div className="mt-8 grid w-full gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+                      Inventory
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">
+                      Transparent listings
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+                      Financing
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">
+                      Several financing options
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-center">
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+                      Trust
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">
+                      Reliable vehicles
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 inline-flex rounded-full bg-[#d71920] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#ef232b]">
+                  Browse Used Cars
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#0d0d0d] px-6 py-16">
+        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+              Why Apex
+            </p>
+            <h3
+              className="mt-3 text-2xl font-bold"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              One brand. Two lanes.
+            </h3>
+            <p className="mt-4 leading-7 text-zinc-300">
+              Apex brings automotive services and pre-owned inventory together in
+              one sharp, modern experience.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/30 p-6">
+            <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+              Services Side
+            </p>
+            <p className="mt-3 text-lg font-semibold">
+              Protect and perfect your vehicle.
+            </p>
+            <p className="mt-3 text-zinc-300">
+              Tint, detailing, ceramic coating, and premium finish work for
+              owners who care about the details.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-black/30 p-6">
+            <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
+              Inventory Side
+            </p>
+            <p className="mt-3 text-lg font-semibold">
+              Shop quality pre-owned vehicles.
+            </p>
+            <p className="mt-3 text-zinc-300">
+              A cleaner dealership experience with better galleries, specs,
+              filters, and vehicle presentation.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
