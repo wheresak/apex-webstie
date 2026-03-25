@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Car = {
   title: string;
@@ -80,6 +80,7 @@ const emptyForm: EditForm = {
 export default function AdminInventoryPage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [form, setForm] = useState<EditForm>(emptyForm);
 
@@ -209,10 +210,34 @@ export default function AdminInventoryPage() {
     };
   }, []);
 
+  const filteredCars = useMemo(() => {
+    if (!search.trim()) return cars;
+
+    const term = search.toLowerCase();
+
+    return cars.filter((car) =>
+      [
+        car.title,
+        car.slug,
+        car.make,
+        car.model,
+        car.stock_number,
+        car.vin,
+      ]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(term))
+    );
+  }, [cars, search]);
+
   return (
     <div className="min-h-screen bg-black p-6 text-white sm:p-10">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-3xl font-bold">Admin Inventory</h1>
+        <div>
+          <h1 className="text-3xl font-bold">Admin Inventory</h1>
+          <p className="mt-2 text-sm text-zinc-400">
+            Search by title, make/model, VIN, or stock number.
+          </p>
+        </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <a
@@ -234,6 +259,16 @@ export default function AdminInventoryPage() {
         </div>
       </div>
 
+      <div className="mb-8">
+        <input
+          type="text"
+          placeholder="Search by stock #, title, make, model, VIN..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-2xl border border-white/10 bg-zinc-950 px-4 py-3 outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10"
+        />
+      </div>
+
       {loading ? (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {[...Array(3)].map((_, i) => (
@@ -252,7 +287,7 @@ export default function AdminInventoryPage() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {cars.map((car) => {
+          {filteredCars.map((car) => {
             const imageSrc =
               typeof car.image_url === "string" && car.image_url.trim() !== ""
                 ? car.image_url
@@ -275,6 +310,11 @@ export default function AdminInventoryPage() {
                   <p className="mt-1 text-sm text-zinc-400 capitalize">
                     {car.status ?? "available"}
                   </p>
+                  {car.stock_number && (
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">
+                      {car.stock_number}
+                    </p>
+                  )}
 
                   <div className="mt-4 flex flex-wrap gap-3">
                     <a
@@ -322,95 +362,23 @@ export default function AdminInventoryPage() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <Field
-                label="Title"
-                value={form.title}
-                onChange={(v) => setForm({ ...form, title: v })}
-              />
-              <Field
-                label="Slug"
-                value={form.slug}
-                onChange={(v) => setForm({ ...form, slug: v })}
-              />
-              <Field
-                label="Year"
-                value={form.year}
-                onChange={(v) => setForm({ ...form, year: v })}
-                type="number"
-              />
-              <Field
-                label="Make"
-                value={form.make}
-                onChange={(v) => setForm({ ...form, make: v })}
-              />
-              <Field
-                label="Model"
-                value={form.model}
-                onChange={(v) => setForm({ ...form, model: v })}
-              />
-              <Field
-                label="Price"
-                value={form.price}
-                onChange={(v) => setForm({ ...form, price: v })}
-                type="number"
-              />
-              <Field
-                label="Mileage"
-                value={form.mileage}
-                onChange={(v) => setForm({ ...form, mileage: v })}
-                type="number"
-              />
-              <Field
-                label="Doors"
-                value={form.doors}
-                onChange={(v) => setForm({ ...form, doors: v })}
-                type="number"
-              />
-              <Field
-                label="Transmission"
-                value={form.transmission}
-                onChange={(v) => setForm({ ...form, transmission: v })}
-              />
-              <Field
-                label="Drivetrain"
-                value={form.drivetrain}
-                onChange={(v) => setForm({ ...form, drivetrain: v })}
-              />
-              <Field
-                label="Exterior Color"
-                value={form.exterior_color}
-                onChange={(v) => setForm({ ...form, exterior_color: v })}
-              />
-              <Field
-                label="Interior Color"
-                value={form.interior_color}
-                onChange={(v) => setForm({ ...form, interior_color: v })}
-              />
-              <Field
-                label="Fuel Type"
-                value={form.fuel_type}
-                onChange={(v) => setForm({ ...form, fuel_type: v })}
-              />
-              <Field
-                label="Engine"
-                value={form.engine}
-                onChange={(v) => setForm({ ...form, engine: v })}
-              />
-              <Field
-                label="Body Type"
-                value={form.body_type}
-                onChange={(v) => setForm({ ...form, body_type: v })}
-              />
-              <Field
-                label="Stock #"
-                value={form.stock_number}
-                onChange={(v) => setForm({ ...form, stock_number: v })}
-              />
-              <Field
-                label="VIN"
-                value={form.vin}
-                onChange={(v) => setForm({ ...form, vin: v })}
-              />
+              <Field label="Title" value={form.title} onChange={(v) => setForm({ ...form, title: v })} />
+              <Field label="Slug" value={form.slug} onChange={(v) => setForm({ ...form, slug: v })} />
+              <Field label="Year" value={form.year} onChange={(v) => setForm({ ...form, year: v })} type="number" />
+              <Field label="Make" value={form.make} onChange={(v) => setForm({ ...form, make: v })} />
+              <Field label="Model" value={form.model} onChange={(v) => setForm({ ...form, model: v })} />
+              <Field label="Price" value={form.price} onChange={(v) => setForm({ ...form, price: v })} type="number" />
+              <Field label="Mileage" value={form.mileage} onChange={(v) => setForm({ ...form, mileage: v })} type="number" />
+              <Field label="Doors" value={form.doors} onChange={(v) => setForm({ ...form, doors: v })} type="number" />
+              <Field label="Transmission" value={form.transmission} onChange={(v) => setForm({ ...form, transmission: v })} />
+              <Field label="Drivetrain" value={form.drivetrain} onChange={(v) => setForm({ ...form, drivetrain: v })} />
+              <Field label="Exterior Color" value={form.exterior_color} onChange={(v) => setForm({ ...form, exterior_color: v })} />
+              <Field label="Interior Color" value={form.interior_color} onChange={(v) => setForm({ ...form, interior_color: v })} />
+              <Field label="Fuel Type" value={form.fuel_type} onChange={(v) => setForm({ ...form, fuel_type: v })} />
+              <Field label="Engine" value={form.engine} onChange={(v) => setForm({ ...form, engine: v })} />
+              <Field label="Body Type" value={form.body_type} onChange={(v) => setForm({ ...form, body_type: v })} />
+              <Field label="Stock #" value={form.stock_number} onChange={(v) => setForm({ ...form, stock_number: v })} />
+              <Field label="VIN" value={form.vin} onChange={(v) => setForm({ ...form, vin: v })} />
               <Field
                 label="Main Image URL"
                 value={form.image_url}
@@ -424,9 +392,7 @@ export default function AdminInventoryPage() {
                 </label>
                 <textarea
                   value={form.gallery_urls}
-                  onChange={(e) =>
-                    setForm({ ...form, gallery_urls: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, gallery_urls: e.target.value })}
                   className="min-h-32 w-full rounded-xl border border-white/10 bg-black/40 p-3 text-white outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10"
                 />
               </div>
@@ -437,9 +403,7 @@ export default function AdminInventoryPage() {
                 </label>
                 <textarea
                   value={form.description}
-                  onChange={(e) =>
-                    setForm({ ...form, description: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
                   className="min-h-36 w-full rounded-xl border border-white/10 bg-black/40 p-3 text-white outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10"
                 />
               </div>
@@ -450,9 +414,7 @@ export default function AdminInventoryPage() {
                 </label>
                 <select
                   value={form.status}
-                  onChange={(e) =>
-                    setForm({ ...form, status: e.target.value })
-                  }
+                  onChange={(e) => setForm({ ...form, status: e.target.value })}
                   className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-white outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10"
                 >
                   <option value="available">available</option>
@@ -466,9 +428,7 @@ export default function AdminInventoryPage() {
                   <input
                     type="checkbox"
                     checked={form.featured}
-                    onChange={(e) =>
-                      setForm({ ...form, featured: e.target.checked })
-                    }
+                    onChange={(e) => setForm({ ...form, featured: e.target.checked })}
                   />
                   <span className="text-sm font-medium">Featured Vehicle</span>
                 </label>

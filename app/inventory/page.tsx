@@ -15,6 +15,7 @@ type Vehicle = {
   make?: string | null;
   model?: string | null;
   created_at?: string | null;
+  stock_number?: string | null;
 };
 
 export default function InventoryPage() {
@@ -76,11 +77,19 @@ export default function InventoryPage() {
     let result = [...cars];
 
     if (search.trim()) {
-      const term = search.toLowerCase();
-      result = result.filter((car) =>
-        `${car.year ?? ""} ${car.title}`.toLowerCase().includes(term)
-      );
-    }
+    const term = search.toLowerCase();
+
+    result = result.filter((car) =>
+    [
+      `${car.year ?? ""} ${car.title}`,
+      car.make,
+      car.model,
+      car.stock_number,
+    ]
+      .filter(Boolean)
+      .some((value) => String(value).toLowerCase().includes(term))
+  );
+}
 
     if (statusFilter !== "all") {
       result = result.filter(
@@ -232,7 +241,7 @@ export default function InventoryPage() {
         onChange={(e) => setStatusFilter(e.target.value)}
         className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none"
       >
-        <option value="all">All Statuses</option>
+        <option value="all">All Availability</option>
         <option value="available">Available</option>
         <option value="pending">Pending</option>
         <option value="sold">Sold</option>
@@ -352,7 +361,14 @@ export default function InventoryPage() {
                     ? car.image_url
                     : "/placeholder.jpg";
 
-                const status = car.status ?? "available";
+                const status = (car.status ?? "available").toLowerCase();
+
+                  const statusClasses =
+                    status === "available"
+                      ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-300"
+                      : status === "pending"
+                      ? "border-yellow-400/30 bg-yellow-500/15 text-yellow-300"
+                      : "border-red-400/30 bg-red-500/15 text-red-300";
 
                 return (
                   <div
@@ -366,7 +382,9 @@ export default function InventoryPage() {
                         className="h-72 w-full object-cover transition duration-500 group-hover:scale-105"
                       />
 
-                      <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/70 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white backdrop-blur-md">
+                      <div
+                        className={`absolute left-4 top-4 rounded-full border px-3 py-1 text-xs uppercase tracking-[0.2em] backdrop-blur-md ${statusClasses}`}
+                      >
                         {status}
                       </div>
                     </div>

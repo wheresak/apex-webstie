@@ -36,7 +36,7 @@ export default function Navbar() {
 
             <Link
               href="/services"
-              className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-[#d71920]/60 hover:text-[#ff4d4d]"
+              className="rounded-full bg-[#4da3ff] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#69b2ff]"
             >
               Tint / Detailing
             </Link>

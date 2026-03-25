@@ -5,18 +5,6 @@ import { supabase } from "@/lib/supabase";
 import { v4 as uuid } from "uuid";
 import { useRouter } from "next/navigation";
 
-function generateSlug(
-  year: string,
-  make: string,
-  model: string,
-  stock: string
-) {
-  return `${year}-${make}-${model}-${stock}`
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
-}
-
 export default function AddVehiclePage() {
   const router = useRouter();
 
@@ -26,7 +14,6 @@ export default function AddVehiclePage() {
 
   const [form, setForm] = useState({
     title: "",
-    slug: "",
     year: "",
     make: "",
     model: "",
@@ -37,7 +24,6 @@ export default function AddVehiclePage() {
     exterior_color: "",
     interior_color: "",
     vin: "",
-    stock_number: "",
     fuel_type: "",
     engine: "",
     body_type: "",
@@ -112,23 +98,13 @@ export default function AddVehiclePage() {
 
       const mainImage = uploadedUrls[mainIndex];
 
-      const autoSlug = generateSlug(
-        form.year,
-        form.make,
-        form.model,
-        form.stock_number
-      );
-
       const res = await fetch("/api/add-vehicle", {
         method: "POST",
         body: JSON.stringify({
           ...form,
-          slug: autoSlug,
           year: form.year ? Number(form.year) : null,
-          make: form.make,
-          model: form.model,
           price: Number(form.price),
-          mileage: Number(form.mileage),
+          mileage: form.mileage ? Number(form.mileage) : null,
           doors: form.doors ? Number(form.doors) : null,
           image_url: mainImage,
           gallery_urls: uploadedUrls,
@@ -150,13 +126,6 @@ export default function AddVehiclePage() {
     }
   }
 
-  const liveSlug = generateSlug(
-    form.year,
-    form.make,
-    form.model,
-    form.stock_number
-  );
-
   return (
     <main className="min-h-screen bg-black px-6 py-16 text-white">
       <div className="mx-auto max-w-4xl">
@@ -164,6 +133,9 @@ export default function AddVehiclePage() {
           <h1 className="text-4xl font-bold">Add Vehicle</h1>
           <p className="mt-3 text-zinc-400">
             Upload photos, choose the main image, and fill in the vehicle details.
+          </p>
+          <p className="mt-2 text-sm text-zinc-500">
+            Stock number will be auto-generated when you save.
           </p>
         </div>
 
@@ -184,7 +156,9 @@ export default function AddVehiclePage() {
 
             {previews.length > 0 && (
               <div className="mt-5">
-                
+                <p className="mb-3 text-sm text-zinc-400">
+                  Tap a photo to set the main image. Tap × to remove a bad one.
+                </p>
 
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {previews.map((preview, i) => {
@@ -260,17 +234,6 @@ export default function AddVehiclePage() {
                 onChange={(v) => setForm({ ...form, model: v })}
               />
               <LabeledField
-                label="Stock #"
-                value={form.stock_number}
-                onChange={(v) => setForm({ ...form, stock_number: v })}
-              />
-              <LabeledField
-                label="Slug Preview"
-                value={liveSlug}
-                onChange={() => {}}
-                readOnly
-              />
-              <LabeledField
                 label="Price"
                 value={form.price}
                 onChange={(v) => setForm({ ...form, price: v })}
@@ -282,11 +245,21 @@ export default function AddVehiclePage() {
                 onChange={(v) => setForm({ ...form, mileage: v })}
                 type="number"
               />
-              <LabeledField
-                label="Status"
-                value={form.status}
-                onChange={(v) => setForm({ ...form, status: v })}
-              />
+
+              <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">
+                  Status
+                </label>
+                <select
+                  value={form.status}
+                  onChange={(e) => setForm({ ...form, status: e.target.value })}
+                  className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-white outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10"
+                >
+                  <option value="available">available</option>
+                  <option value="pending">pending</option>
+                  <option value="sold">sold</option>
+                </select>
+              </div>
             </div>
           </section>
 
@@ -399,13 +372,11 @@ function LabeledField({
   value,
   onChange,
   type = "text",
-  readOnly = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   type?: string;
-  readOnly?: boolean;
 }) {
   return (
     <div>
@@ -415,9 +386,8 @@ function LabeledField({
       <input
         type={type}
         value={value}
-        readOnly={readOnly}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-white outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10 read-only:cursor-not-allowed read-only:opacity-70"
+        className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-white outline-none transition duration-200 focus:border-[#d71920]/55 focus:ring-4 focus:ring-[#d71920]/10"
       />
     </div>
   );

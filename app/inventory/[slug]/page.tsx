@@ -53,9 +53,24 @@ export default async function VehiclePage({
                   Vehicle Details
                 </p>
 
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-zinc-300">
-                  {car.status ?? "available"}
-                </span>
+                {(() => {
+                        const status = (car.status ?? "available").toLowerCase();
+
+                        const statusClasses =
+                          status === "available"
+                            ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-300"
+                            : status === "pending"
+                            ? "border-yellow-400/30 bg-yellow-500/15 text-yellow-300"
+                            : "border-red-400/30 bg-red-500/15 text-red-300";
+
+                        return (
+                          <span
+                            className={`rounded-full border px-3 py-1 text-xs uppercase tracking-[0.2em] ${statusClasses}`}
+                          >
+                            {status}
+                          </span>
+                        );
+                      })()}
               </div>
 
               <h1
@@ -92,7 +107,7 @@ export default async function VehiclePage({
                   <Spec label="Exterior" value={car.exterior_color} />
                   <Spec label="Interior" value={car.interior_color} />
                   <Spec label="Stock #" value={car.stock_number} />
-                  <Spec label="VIN" value={car.vin} />
+                  
                 </div>
               </div>
 

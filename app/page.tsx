@@ -93,7 +93,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="mt-8 inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition group-hover:border-[#d71920]/50">
+                <div className="mt-8 inline-flex rounded-full bg-[#4da3ff] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#69b2ff]">
                   Go to Services
                 </div>
               </div>
